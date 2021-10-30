@@ -17,12 +17,12 @@ Table of Contents:
 </ul>
 </li>
 <li>Requirements
-<ol>
+<ul>
 <li>Requirement 1 implemented in file "" on line _</li>
 <li>Requirement 2 implemented in file "" on line _</li>
 <li>Requirement 3 implemented in file "" on line _</li>
 <li>Requirement 4 implemented in file "" on line _</li>
 <li>Requirement 5 implemented in file "" on line _</li>
-</ol>
+</ul>
 </li>
 </ol>
