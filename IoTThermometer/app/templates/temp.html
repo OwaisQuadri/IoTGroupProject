@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<form action=" " method="POST" >
+<!--            {%csrf_token%}-->
+<!--          <div class="form-group">-->
+<!--            <label class="text-primary">ID</label>-->
+<!--            <div>-->
+<!--              <textarea class="form-control" name="id" id="getUID" placeholder="Please Tag your Card to display ID" rows="1" cols="1" required>{{id}}</textarea>-->
+<!--            </div>-->
+<!--          </div>-->
+    <body>
+    {% if temp %}
+    <h1>The current temperature is: {{temp}} degrees celcius</h1>
+    {% else %}
+    <h1>This application provides a live feed of the current temperature</h1>
+    {% endif %}
+    </body>
+</form>
+</html>
