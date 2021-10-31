@@ -5,4 +5,6 @@ from django.http import HttpResponse
 #request handler
 def main(request):
     #get data from db
-    return HttpResponse('Test')
+    return render(request,'temp.html',{
+        'temp':'30'
+    })

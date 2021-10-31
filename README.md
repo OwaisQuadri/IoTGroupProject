@@ -3,8 +3,8 @@ Description:
   
 put desc here  
   
-How to download and run:
-
+How to download and run:  
+  
 1. clone repository:  
 ```bash
 git clone https://github.com/raveen15/IoTAssignment2
