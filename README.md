@@ -5,7 +5,31 @@ put desc here
   
 How to download and run:
   
-steps here  
+<ol>
+<li>clone repository:  
+```bash
+git clone https://github.com/raveen15/IoTAssignment2
+```
+</li>
+<li>ensure python, pipenv, and django are installed  
+```bash
+python --version
+pipenv --version
+django-admin --version
+```  
+if you need to download pipenv or django, use:
+```bash
+pip install pipenv
+pipenv install django
+```  
+</li>
+<li>run virtual environment, and then run app on desired port:  
+```bash
+pipenv shell
+python manage.py runserver <port>
+```
+</li>
+</ol> 
   
 Table of Contents:  
   
