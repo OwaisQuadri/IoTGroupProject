@@ -1,7 +1,7 @@
 # IoTAssignment2  
 Description:  
   
-put desc here  
+An IoT Thermometer will display the reading of the temperature on an LCD screen and  a web browser. This will be accomplished by utilizing the NodeMCU board by connecting it to the temperature and humidity sensor. This sensor will collect the temperature and humidity of the room, and we will program it to display that information on the LCD screen. The NodeMCU board will be powered via USB cable and will be programmed by using Arduino IDE. Appropriate libraries and tools will be used to program the sensor and LCD screen. The values will be shown in real-time and provide accurate results of the temperature and humidity in the room. The user can view previous temperature/humidity values on a web browser application along with the date and time recorded. The software used to collect and store the previous measurement by MySQL and Django python will be used to retrieve the data through Django REST API.   
   
 How to download and run:  
   
@@ -25,23 +25,4 @@ pipenv install django
 pipenv shell
 python manage.py runserver <port>
 ``` 
-  
-Table of Contents:  
-  
-<ol>
-<li>Use Cases:<ul>
-<li>Use Case 1 Implemented in file "" on line _</li>
-<li>Use Case 2 Implemented in file "" on line _</li>
-<li>Use Case 3 Implemented in file "" on line _</li>
-</ul>
-</li>
-<li>Requirements
-<ul>
-<li>Requirement 1 implemented in file "" on line _</li>
-<li>Requirement 2 implemented in file "" on line _</li>
-<li>Requirement 3 implemented in file "" on line _</li>
-<li>Requirement 4 implemented in file "" on line _</li>
-<li>Requirement 5 implemented in file "" on line _</li>
-</ul>
-</li>
-</ol>
+
