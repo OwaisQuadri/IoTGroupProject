@@ -12,11 +12,11 @@ from .serializers import TempSerializer
 
 def main(request):
     # get data from db
-    form = SaveForm(request.POST)
-    context = {
-        temp: form.cleaned_data.get('tempString'),
-    }
-    return render(request, 'temp.html', context)
+    # form = SaveForm(request.POST)
+    # context = {
+    #     temp: form.cleaned_data.get('tempString'),
+    # }
+    return render(request, 'temp.html')
 
 def temp_list(request):
     if request.method =='GET':
