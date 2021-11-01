@@ -4,6 +4,6 @@ from . import views
 
 # URLConfiguration
 urlpatterns = [
-    path('', views.main),
-    path('temps/', views.temp_list)
+    path('', views.Home.as_view()),
+    path('history/', views.History.as_view())
 ]

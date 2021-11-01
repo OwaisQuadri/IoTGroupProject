@@ -5,30 +5,30 @@ from rest_framework.parsers import JSONParser
 from rest_framework.renderers import JSONRenderer
 from .models import Temperature
 from .serializers import TempSerializer
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.views import APIView
 
 # Create your views here.
-
-# request handler
-
-def main(request):
-    # get data from db
-    form = SaveForm(request.POST)
-    context = {
-        temp: form.cleaned_data.get('tempString'),
-    }
-    return render(request, 'temp.html', context)
-
-def temp_list(request):
-    if request.method =='GET':
+class History(APIView):
+    def get(self, request):
         temps = Temperature.objects.all()
-        
         ser=TempSerializer(temps, many=True)
-        return JsonResponse(ser.data, safe = False)
+        context={
+            'historyJSON': ser.data
+        }
+        return render(request, 'history.html',context)
 
-    elif request.method =='POST':
-        data = JSONParser.parse(request)
-        ser=TempSerializer(data=data)
-        if ser.is_valid():
-            ser.save()
-            return JsonResponse(ser.data,status=201)
-        return JsonResponse(ser.errors,status=400)
+class Home(APIView):
+    def get(self,request):
+        temp=Temperature.objects.last().temperature
+        humidity=Temperature.objects.last().humidity
+        # ser=TempSerializer(temp)
+        # currTemp=ser.data
+        print(temp," ",humidity)
+        context={
+            'temp': temp,
+            'humidity':humidity
+        }
+        return render(request, 'temp.html',context)
