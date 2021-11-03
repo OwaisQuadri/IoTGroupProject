@@ -24,11 +24,16 @@ class Home(APIView):
     def get(self,request):
         temp=Temperature.objects.last().temperature
         humidity=Temperature.objects.last().humidity
-        # ser=TempSerializer(temp)
-        # currTemp=ser.data
+        
         print(temp," ",humidity)
         context={
             'temp': temp,
             'humidity':humidity
         }
         return render(request, 'temp.html',context)
+    def post(self,request):
+        ser=TempSerializer(data=request.data)
+        if ser.is_valid():
+            ser.save()
+            return Response(ser.data,status=status.HTTP_201_CREATED)
+        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
