@@ -9,6 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 class History(APIView):
@@ -31,6 +32,8 @@ class Home(APIView):
             'humidity':humidity
         }
         return render(request, 'temp.html',context)
+
+    @csrf_exempt
     def post(self,request):
         ser=TempSerializer(data=request.data)
         if ser.is_valid():
