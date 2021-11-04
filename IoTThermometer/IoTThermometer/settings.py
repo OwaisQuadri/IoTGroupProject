@@ -135,3 +135,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         'rest_framework.authentication.BasicAuthentication'
 #     ]
 # }
+
+import django_heroku
+django_heroku.settings(locals())
