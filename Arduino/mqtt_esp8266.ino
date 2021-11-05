@@ -1,61 +1,46 @@
-#include <ESP8266HTTPClient.h>
+#include <ArduinoJson.h>
+
+/**
+   BasicHTTPClient.ino
+    Created on: 24.05.2015
+*/
+
+#include <Arduino.h>
+#include <base64.h> 
 #include <ESP8266WiFi.h>
-#include <DHT.h>  // Including library for dht
- 
-#define DHTPIN 0          //pin where the dht11 is connected
- 
+#include <ESP8266WiFiMulti.h>
+
+#include <ESP8266HTTPClient.h>
+
+#include <WiFiClient.h>
+#include <DHT_U.h>
+#define DHTPIN 0  
+ESP8266WiFiMulti WiFiMulti;
 DHT dht(DHTPIN, DHT11);
- 
-// Update these with values suitable for your network.
+void setup() {
 
-const char* ssid = "BELL053";
-const char* password = "64E5EC2347D9";
-const char* mqtt_server = "broker.mqtt-dashboard.com";
+  Serial.begin(115200);
+  // Serial.setDebugOutput(true);
 
-WiFiClient espClient;
-long lastMsg = 0;
-char msg[100];
-int value = 0;
-
-void setup_wifi() {
-
-  delay(10);
-  // We start by connecting to a WiFi network
   Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(ssid);
+  Serial.println();
+  Serial.println();
 
-  WiFi.begin(ssid, password);
-
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.println("Waiting for Wi-Fi connection");
-    Serial.print(".");
+  for (uint8_t t = 4; t > 0; t--) {
+    Serial.printf("[SETUP] WAIT %d...\n", t);
+    Serial.flush();
+    delay(1000);
   }
 
-  randomSeed(micros());
-
-  Serial.println("");
-  Serial.println("WiFi connected");
-  Serial.println("IP address: ");
-  Serial.println(WiFi.localIP());
-}
-
-void setup() {
-  
-  Serial.println("Line 1");
-  pinMode(BUILTIN_LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
-  Serial.println("Line 2");
-  Serial.begin(115200);
-  Serial.println("Line 3");
-  setup_wifi();
+  WiFi.mode(WIFI_STA);
+  WiFiMulti.addAP("OnePlus 6T", "Raveenth15");
   dht.begin();
 }
 
 void loop() {
-  
-  float humidity = dht.readHumidity();
-  float temperature = dht.readTemperature();
+
+  int humidity = dht.readHumidity();
+  int temperature = dht.readTemperature();
       
   if (isnan(humidity) || isnan(temperature)) 
   {
@@ -66,19 +51,58 @@ void loop() {
   Serial.print("Temperature: ");
   Serial.print(temperature);
   Serial.print(" degrees Celcius, Humidity: ");
-  Serial.print(humidity - 20);
+  Serial.print(humidity);
   Serial.println();
-
-  //HTTP connection
-  HTTPClient http;
-  http.begin(espClient, "http://127.0.0.1:8000/app/");
-  http.addHeader("Content-Type", "text/plain");
   String tempString = "";
   tempString.concat(temperature);
-  int httpCode = http.POST(tempString);
-  String payload = http.getString();
-  Serial.println(httpCode);
-  Serial.println(payload);
-  http.end();
-  delay(5000);
+  String humString = "";
+  humString.concat(humidity);
+
+  DynamicJsonDocument doc(2048);
+  doc["temperature"] = tempString;
+  doc["humidity"] = humString;
+  
+  String json;
+  serializeJson(doc, json);
+  
+  // wait for WiFi connection
+  if ((WiFiMulti.run() == WL_CONNECTED)) {
+
+    WiFiClient client;
+
+    HTTPClient http;
+
+    Serial.print("[HTTP] begin...\n");
+    if (http.begin(client, "http://ros-temphumid.herokuapp.com/")) {  // HTTP
+
+      http.addHeader("Content-Type", "application/json");
+//      String auth = base64::encode("owais:admin");
+//      http.addHeader("Authorization", "Basic " + auth);
+      Serial.print("[HTTP] POST...\n");
+      // start connection and send HTTP header
+      int httpCode = http.POST(json);
+
+      // httpCode will be negative on error
+      if (httpCode > 0) {
+        // HTTP header has been send and Server response header has been handled
+        Serial.printf("[HTTP] POST... code: %d\n", httpCode);
+
+        // file found at server
+        if (httpCode == HTTP_CODE_OK) {
+          const String& payload = http.getString();
+          Serial.println("received payload:\n<<");
+          Serial.println(payload);
+          Serial.println(">>");
+        }
+      } else {
+        Serial.printf("[HTTP] POST... failed, error: %s\n", http.errorToString(httpCode).c_str());
+      }
+
+      http.end();
+    } else {
+      Serial.printf("[HTTP} Unable to connect\n");
+    }
+  }
+
+  delay(10000);
 }
